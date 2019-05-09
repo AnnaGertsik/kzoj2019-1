@@ -18,18 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/redact")
+@WebServlet("/diary")
 public class AdminFoodServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SingleTone singleTone=SingleTone.getInstance("???");
-        if(singleTone.getLogin().equals("???") || singleTone.getAccessLevel()==0) req.getRequestDispatcher("AutorizWindow.jsp").forward(req, resp);
+        if(singleTone.getLogin().equals("???")) req.getRequestDispatcher("AutorizWindow.jsp").forward(req, resp);
         else {
-            Configuration configuration=new Configuration();
-            SessionFactory factory=configuration.configure().buildSessionFactory();
-            DAO<Food, String> foodStringDAO=new FoodDAO(factory);
-            req.setAttribute("tableFood", foodStringDAO.getTableView(""));
-            req.getRequestDispatcher("AdminFoodControlWindow.jsp").forward(req, resp);
+            DiaryViewer diaryViewer = new DiaryViewer();
+            diaryViewer.main(req, resp);
         }
     }
 
@@ -42,44 +39,35 @@ public class AdminFoodServlet extends HttpServlet {
         DAO<Diary, String> diaryDAO=new DiaryDAO(factory);
         DAO<Food, String> foodDAO=new FoodDAO(factory);
         DAO<Statistic, String> statisticDAO=new StatisticDAO(factory);
-        String foodName=req.getParameter("foodName");
-
-        if(!foodName.equals("")){
-            Food food=foodDAO.read(foodName);
+        if(!req.getParameter("dish").equals("")){
+            Food food=foodDAO.read(req.getParameter("dish"));
             if(food.getFoodName().equals("???")){
-                food.setFoodName(req.getParameter("foodName"));
-                food.setCalories(Integer.parseInt(req.getParameter("kk")));
-                food.setCalories(Integer.parseInt(req.getParameter("fats")));
-                food.setCalories(Integer.parseInt(req.getParameter("prot")));
-                food.setCalories(Integer.parseInt(req.getParameter("carboh")));
-                foodDAO.create(food);
+                req.setAttribute("errorNoSuchDish","Блюдо не найдено");
             }
-            else{
-                int[] diff=new int[6];
-                diff[5]=1;
-                if(food.getCalories()!=Integer.parseInt(req.getParameter("kk")))
-                    diff[0]=food.getCalories()-Integer.parseInt(req.getParameter("kk"));
-                if(food.getFats()!=Integer.parseInt(req.getParameter("fats")))
-                    diff[1]=food.getFats()-Integer.parseInt(req.getParameter("fats"));
-                if(food.getProtein()!=Integer.parseInt(req.getParameter("prot")))
-                    diff[2]=food.getProtein()-Integer.parseInt(req.getParameter("prot"));
-                if(food.getCarbohydrates()!=Integer.parseInt(req.getParameter("carboh")))
-                    diff[3]=food.getCarbohydrates()-Integer.parseInt(req.getParameter("carboh"));
-                ((StatisticDAO) statisticDAO).editFood(diff, req.getParameter("foodName"));
-            }
-        }
-        String[] checkes=req.getParameterValues("toDelete");
-        if(checkes!=null){
-            for(int i=0;i<checkes.length;i++){
-                Food food=foodDAO.read(checkes[i]);
-                int diff[]=new int[6];
-                diff[5]=-1;
-                diff[0]=food.getCalories();
-                diff[1]=food.getFats();
-                diff[2]=food.getProtein();
-                diff[3]=food.getCarbohydrates();
-                ((StatisticDAO) statisticDAO).editFood(diff, req.getParameter("toDelete"));
-                foodDAO.delete(food);
+            else {
+                SingleTone singleTone=SingleTone.getInstance("login");
+                diary.setLogin(singleTone.getLogin());
+                diary.setDate(req.getParameter("date"));
+                diary.setSize(Integer.parseInt(req.getParameter("size")));
+                diary.setFoodName(req.getParameter("dish"));
+                diaryDAO.create(diary);
+                Statistic statistic=statisticDAO.read(singleTone.getLogin()+"+"+req.getParameter("date"));
+                if(statistic.getLogin().equals("???")){
+                    statistic.setLogin(singleTone.getLogin());
+                    statistic.setDate(req.getParameter("date"));
+                    statistic.setCurrCal(food.getCalories()*diary.getSize()/100);
+                    statistic.setCurrCarbohydrates(food.getCarbohydrates()*diary.getSize()/100);
+                    statistic.setCurrFats(food.getFats()*diary.getSize()/100);
+                    statistic.setCurrProteins(food.getProtein()*diary.getSize()/100);
+                    statisticDAO.create(statistic);
+                }
+                else{
+                    statistic.setCurrCal(statistic.getCurrCal()+food.getCalories()*diary.getSize()/100);
+                    statistic.setCurrCarbohydrates(statistic.getCurrCarbohydrates()+food.getCarbohydrates()*diary.getSize()/100);
+                    statistic.setCurrFats(statistic.getCurrFats()+food.getFats()*diary.getSize()/100);
+                    statistic.setCurrProteins(statistic.getCurrProteins()+food.getProtein()*diary.getSize()/100);
+                    statisticDAO.update(statistic);
+                }
             }
         }
         doGet(req, resp);

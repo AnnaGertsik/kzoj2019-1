@@ -1,7 +1,6 @@
 package com.company;
 
 import com.model.Diary;
-import com.model.Food;
 import com.model.Statistic;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,39 +9,12 @@ import org.hibernate.query.Query;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 
 public class StatisticDAO implements DAO<Statistic, String> {
     private SessionFactory factory;
     public StatisticDAO(SessionFactory factory){
         this.factory=factory;
-    }
-
-    public Map<String, Statistic> getData(String login){
-        String sql="From "+Statistic.class.getSimpleName();
-        sql+=" where login='"+login+"'";
-        Map<String, Statistic> map=new TreeMap<>();
-        try(Session session=factory.openSession()){
-            Query query=session.createQuery(sql);
-            List<Statistic> statistics=query.list();
-            for(Statistic s: statistics){
-                map.put(s.getDate(), s);
-            }
-        }
-        return map;
-    }
-    public void deleteMany(String login){
-        String sql="From "+Statistic.class.getSimpleName();
-        sql+=" where login='"+login+"'";
-        try(Session session=factory.openSession()){
-            Query query=session.createQuery(sql);
-            List<Statistic> statistics=query.list();
-            for(Statistic s: statistics){
-                delete(s);
-            }
-        }
     }
     public boolean create(Statistic statistic){
         boolean result=false;
@@ -59,33 +31,6 @@ public class StatisticDAO implements DAO<Statistic, String> {
         return result;
     }
 
-    public void editFood(int[] data, String foodName){
-        DAO<Diary, String> diaryStringDAO=new DiaryDAO(factory);
-        String sql = "From " + Diary.class.getSimpleName();
-        sql+=" where foodName= :paramName";
-        try(Session session=factory.openSession()){
-            Query query=session.createQuery(sql);
-            query.setParameter("paramName", foodName);
-            List<Diary> diaries = query.list();
-            for(Diary d: diaries){
-                sql = "From " + Statistic.class.getSimpleName();
-                sql+=" where login= :paramLogin and date= :paramDate";
-                query = session.createQuery(sql);
-                query.setParameter("paramLogin", d.getLogin());
-                query.setParameter("paramDate", d.getDate());
-                List<Statistic> statistics=query.list();
-                for(Statistic s: statistics){
-                    double koeff=d.getSize()/100.0;
-                    s.setCurrCal((int)(s.getCurrCal()-data[0]*koeff));
-                    s.setCurrFats((int)(s.getCurrFats()-data[1]*koeff));
-                    s.setCurrProteins((int)(s.getCurrProteins()-data[2]*koeff));
-                    s.setCurrCarbohydrates((int)(s.getCurrCarbohydrates()-data[3]*koeff));
-                    update(s);
-                }
-                if(data[5]==-1) diaryStringDAO.delete(d);
-            }
-        }
-    }
     public String getTableView(String login){
         String result=" ";
         String sql = "From " + Statistic.class.getSimpleName();

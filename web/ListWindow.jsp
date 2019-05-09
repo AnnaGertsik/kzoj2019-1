@@ -131,23 +131,39 @@
     </nav>
 </div>
 <div class="container">
-    <form action="/table" method="post">
-        <input type="text" placeholder="foodname" name="foodName">
-        <input type="submit" value="Поиск">
+    <form method="post" action="/diary">
+        <label for="date">Дата<input type="date" id="date" name="date"></label>
+        <label for="dish">Блюдо<input type="text" id="dish" name="dish"></label>
+        <label for="size">Размер порции<input type="number" id="size" name="size"></label>
+        <input type="submit" value="Добавить" class="btn btn-default">
+        ${requestScope.errorNoSuchDish}
     </form>
 </div>
 <div class="container-fluid">
     <table border="4px solid grey">
         <tr><!-- ЛИМА, ЭТО НАДО ДЕЛАТЬ ТЕГАМИ th, ТАК КАК ЭТО ЗАГОЛОВКИ
         ТАК ИХ И СТИЛИЗОВАТЬ БУДЕТ ЛЕГЧЕ-->
+            <td>Дата</td>
             <td>Блюдо</td>
+            <td>Размер порции</td>
             <td>Калории</td>
             <td>Жиры</td>
             <td>Белки</td>
             <td>Углеводы</td>
+            <td>Удалить</td>
         </tr>
+        <form method="post" action="/diaryf">
         ${requestScope.data}
+        <tr>
+
+            <td colspan="8">
+                <input type="submit" value="Удалить">
+            </td>
+
+        </tr>
+    </form>
     </table>
+    ${requestScope.norms}
 </div>
 </body>
 </html>

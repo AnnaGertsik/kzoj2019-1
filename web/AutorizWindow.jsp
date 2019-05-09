@@ -15,9 +15,7 @@
     <style>
         /* Demo Background */
         body{background-color: #8bff87;)}
-        .container{
-            align-items: center;
-        }
+
         /* Form Style */
         .form-horizontal{
             background: #fff;
@@ -115,34 +113,9 @@
                 padding: 10px 20px;
             }
         }
-        .btn{
-            float: top;
-            font-size: 14px;
-            color: #fff;
-            background: #00b4ef;
-            border-radius: 30px;
-            padding: 10px 25px;
-            border: none;
-            text-transform: capitalize;
-            transition: all 0.5s ease 0s;
-        }
-        .for{
-            float: top;
-            padding-bottom: 40px;
-            border-radius: 15px;
-            text-align: center;
-        }
-        .otstup{
-            display: block;
-            font-size: 35px;
-            font-weight: 700;
-            padding: 35px 0;
-            margin-bottom: 30px;
-        }
     </style>
 </head>
 <body>
-<p class="otstup"></p>
 <div class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
@@ -162,13 +135,11 @@
                 <input type="submit" class="btn btn-default" value="Вход">
             </div>
                 <p class="help-block">${requestScope.errorUserNotFound}</p>
+
             </form>
-            <p></p>
-            <form action="/registration" method="get" class="for">
-                <div class="form-group">
-                    <input type="submit" class="btn btn-default" value="Регистрация">
-                </div>
-            </form>
+            <form action="/registration" method="get">
+            <input type="submit" class="btn btn-default" value="Регистрация">
+        </form>
         </div></div>
 </div>
 </body>

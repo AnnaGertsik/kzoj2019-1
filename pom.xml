@@ -59,12 +59,7 @@
                 <artifactId>activation</artifactId>
                 <version>1.1.1</version>
             </dependency> -->
-        <!-- https://mvnrepository.com/artifact/jfree/jfreechart-->
-        <dependency>
-            <groupId>jfree</groupId>
-            <artifactId>jfreechart</artifactId>
-            <version>1.0.13</version>
-        </dependency>
+
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>

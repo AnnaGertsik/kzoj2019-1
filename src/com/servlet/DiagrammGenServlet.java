@@ -1,21 +1,11 @@
 package com.servlet;
 
-import com.SingleTone;
-import com.company.DAO;
-import com.company.StatisticDAO;
-import com.model.Statistic;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -27,40 +17,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 
 @WebServlet("/generate")
 public class DiagrammGenServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        SingleTone singleTone=SingleTone.getInstance("do");
-
         OutputStream out = resp.getOutputStream();
         resp.setContentType("image/png");
 
-        XYDataset  dataset = getXYDataset(singleTone.getLogin());
+        XYDataset  dataset = getXYDataset();
 
-        final JFreeChart chart = ChartFactory.createTimeSeriesChart(
-                "Статистика",             // chart title
-                "Дата",                      // x axis label
-                "Потребление",                      // y axis label
+        final JFreeChart chart = ChartFactory.createXYLineChart(
+                "Line Chart",             // chart title
+                "X",                      // x axis label
+                "Y",                      // y axis label
                 dataset,                  // data
+                PlotOrientation.VERTICAL,
                 true,                     // include legend
                 true,                     // tooltips
                 false                     // urls
         );
         XYPlot plot = chart.getXYPlot();
-        DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setDateFormatOverride(new SimpleDateFormat("dd.MM"));
+
         if (chart != null) {
             //resp.setContentType("image/png");
             ChartUtilities.writeChartAsPNG(out, chart, 600, 400);
         }
     }
-    private DefaultCategoryDataset getCategoryDataset()
+    public DefaultCategoryDataset getCategoryDataset()
     {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         dataset.addValue( 23.0, "Param1", "Object1");
@@ -101,49 +85,42 @@ public class DiagrammGenServlet extends HttpServlet {
         dataset.addValue( -2.0, "Param9", "Object4");
         return dataset;
     }
-    private XYDataset getXYDataset(String login) {
-        Configuration configuration=new Configuration();
-        SessionFactory factory=configuration.configure().buildSessionFactory();
-        DAO<Statistic, String> statisticStringDAO=new StatisticDAO(factory);
-        login="do";
-        Map<String, Statistic> map=((StatisticDAO) statisticStringDAO).getData(login);
+    public XYDataset getXYDataset() {
 
-        final TimeSeries series1 = new TimeSeries("Калории");
-        final TimeSeries  series2 = new TimeSeries ("Жиры");
-        final TimeSeries  series3 = new TimeSeries ("Белки");
-        final TimeSeries  series4 = new TimeSeries ("Углеводы");/*
-        final XYSeries series1 = new XYSeries("Калории");
-        final XYSeries  series2 = new XYSeries ("Жиры");
-        final XYSeries  series3 = new XYSeries ("Белки");
-        final XYSeries  series4 = new XYSeries ("Углеводы");*/
-        double i=1;
-        for(Map.Entry<String, Statistic> entry: map.entrySet()){
-            String date=entry.getKey();
-            int day=Integer.parseInt(date.substring(8));
-            int month=Integer.parseInt(date.substring(5,7));
-            int year=Integer.parseInt(date.substring(0,4));
-            Day day1=new Day(day, month, year);
+        final XYSeries series1 = new XYSeries("First");
+        series1.add ( 2.2, 1.3);
+        series1.add ( 4.4, 4.2);
+        series1.add ( 6.6, 5.5);
+        series1.add ( 8.7, 5.8);
+        series1.add (11.9, 5.6);
+        series1.add ( 7.7, 7.9);
+        series1.add ( 5.6, 7.1);
+        series1.add ( 3.5, 8.2);
 
-            series1.add(new Day(day, month, year), entry.getValue().getCurrCal());
-            series2.add(new Day(day, month, year), entry.getValue().getCurrFats());
-            series3.add(new Day(day, month, year), entry.getValue().getCurrProteins());
-            series4.add(new Day(day, month, year), entry.getValue().getCurrCarbohydrates());
-            /*
-            series1.add(i, entry.getValue().getCurrCal());
-            series2.add(i, entry.getValue().getCurrFats());
-            series3.add(i, entry.getValue().getCurrProteins());
-            series4.add(i, entry.getValue().getCurrCarbohydrates());*/
-            i++;
-        }
+        final XYSeries series2 = new XYSeries("Second");
+        series2.add (2.4, 5.5);
+        series2.add (4.7, 7.7);
+        series2.add (6.6, 6.9);
+        series2.add (8.5, 8.8);
+        series2.add (9.8, 4.6);
+        series2.add (2.3, 4.4);
+        series2.add (1.0, 2.2);
+        series2.add (3.1, 1.0);
 
+        final XYSeries series3 = new XYSeries("Third");
+        series3.add (11.1, 4.4);
+        series3.add ( 9.3, 3.6);
+        series3.add ( 7.5, 2.8);
+        series3.add ( 5.7, 3.9);
+        series3.add ( 8.9, 6.6);
+        series3.add ( 6.8, 3.4);
+        series3.add (12.2, 4.3);
+        series3.add (10.4, 3.2);
 
-
-       // final XYSeriesCollection dataset = new XYSeriesCollection();
-        final TimeSeriesCollection dataset = new TimeSeriesCollection();
+        final XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series1);
         dataset.addSeries(series2);
         dataset.addSeries(series3);
-        dataset.addSeries(series4);
 
         return dataset;
     }

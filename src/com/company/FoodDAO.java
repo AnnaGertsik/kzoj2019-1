@@ -4,9 +4,6 @@ import com.model.Food;
 import com.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-
-import java.util.List;
 
 
 public class FoodDAO implements DAO<Food, String> {
@@ -63,27 +60,7 @@ public class FoodDAO implements DAO<Food, String> {
 
     @Override
     public String getTableView(String data) {
-        String sql="From "+Food.class.getSimpleName();
-        String result="";
-        if(!data.equals("") && !data.equals("_")){
-            sql+=" where foodName='"+data+"'";
-        }
-        try(Session session=factory.openSession()){
-            Query query=session.createQuery(sql);
-            List<Food> foods=query.list();
-            for(Food f: foods){
-                result+="\n<tr>\n<td>"+f.getFoodName()+"</td>\n";
-                result+="<td>"+f.getCalories()+"</td>\n";
-                result+="<td>"+f.getFats()+"</td>\n";
-                result+="<td>"+f.getProtein()+"</td>\n";
-                result+="<td>"+f.getCarbohydrates()+"</td>\n";
-                if(data.equals("")) {
-                    result += "<td><input type='checkbox' value='" + f.getFoodName() + "' name='toDelete'></td>\n";
-                }
-                result+="</tr>\n";
-            }
-        }
-        return result;
+        return null;
     }
 
     public boolean delete(Food food){

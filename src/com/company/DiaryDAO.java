@@ -16,17 +16,6 @@ public class DiaryDAO implements DAO<Diary, String> {
     public DiaryDAO(SessionFactory factory){
         this.factory=factory;
     }
-    public void deleteMany(String login){
-        String sql="From "+Diary.class.getSimpleName();
-        sql+=" where login='"+login+"'";
-        try(Session session=factory.openSession()){
-            Query query=session.createQuery(sql);
-            List<Diary> diaries=query.list();
-            for(Diary d: diaries){
-                delete(d);
-            }
-        }
-    }
     public boolean create(Diary dairy){
         boolean result=false;
 
@@ -91,7 +80,6 @@ public class DiaryDAO implements DAO<Diary, String> {
             return result;
         }
     }
-
     public String getTableView(String loginAndDate){
         DAO<Food, String> foodStringDAO=new FoodDAO(factory);
         String result="";

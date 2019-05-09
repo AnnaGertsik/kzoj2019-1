@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Статистика</title>
@@ -131,29 +131,27 @@
     </nav>
 </div>
 <div class="container">
-    <div class="form-horizontal">
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th rowspan="2">Дата</th>
-                <th colspan="2">Калории</th>
-                <th colspan="2">Белки</th>
-                <th colspan="2">Жиры</th>
-                <th colspan="2">Углеводы</th>
-            </tr>
-            <tr>
-                <th>Употреблено</th>
-                <th>Норма</th>
-                <th>Употреблено</th>
-                <th>Норма</th>
-                <th>Употреблено</th>
-                <th>Норма</th>
-                <th>Употреблено</th>
-                <th>Норма</th>
-            </tr>
-            </thead>
-        </table>
-    </div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th rowspan="2">Дата</th>
+            <th colspan="2">Калории</th>
+            <th colspan="2">Белки</th>
+            <th colspan="2">Жиры</th>
+            <th colspan="2">Углеводы</th>
+        </tr>
+        <tr>
+            <th>Употреблено</th>
+            <th>Норма</th>
+            <th>Употреблено</th>
+            <th>Норма</th>
+            <th>Употреблено</th>
+            <th>Норма</th>
+            <th>Употреблено</th>
+            <th>Норма</th>
+        </tr>
+        </thead>
+    </table>
 </div>
 </body>
 </html>

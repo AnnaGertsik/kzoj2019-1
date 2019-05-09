@@ -130,32 +130,15 @@
         </ul>
     </nav>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-offset-3 col-md-6">
-            <h2><strong><mark style="background-color: azure">Добавьте новое блюдо</mark></strong></h2>
-            <form action="/control" method="post" class="form-horizontal">
-                <div class="form-group">
-                    <p class="heading"></p>
-                    <label for="name"><input type="text" id="name" class="form-control" name="name" placeholder="Введите название"></label>
-                </div>
-                <div class="form-group">
-                    <label for="kkl"><input type="number" id="kkl" class="form-control" name="kkl" placeholder="Введите калории"></label>
-                </div>
-                <div class="form-group">
-                    <label for="fats"><input type="text" id="fats" class="form-control" name="fats" placeholder="Введите жиры"></label>
-                </div>
-                <div class="form-group">
-                    <label for="protein"><input type="text" id="protein" class="form-control" name="protein" placeholder="Введите белки"></label>
-                </div>
-                <div class="form-group">
-                    <label for="carbs"><input type="text" id="carbs" class="form-control" name="carbs" placeholder="Введите углеводы"></label>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Добавить" class="btn btn-default">
-                </div>
-                <p class="help-block">${requestScope.errorEmptyField}</p>
-            </form>
-        </div></div></div>
+<h2><strong><mark style="background-color: azure">Добавьте новое блюдо</mark></strong></h2>
+<form action="/control" method="post">
+    <label for="name">Название<input type="text" id="name" name="name"></label>
+    <label for="kkl">Калории<input type="number" id="kkl" name="kkl"></label>
+    <label for="fats">Жиры<input type="text" id="fats" name="fats"></label>
+    <label for="protein">Белки<input type="text" id="protein" name="protein"></label>
+    <label for="carbs">Углеводы<input type="text" id="carbs" name="carbs"></label>
+    <input type="submit" value="Добавить" class="btn btn-default">
+</form>
+${requestScope.errorEmptyField}
 </body>
 </html>

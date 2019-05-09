@@ -8,7 +8,6 @@
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/database.db</jdbc-url>
       <driver-properties>
         <property name="enable_load_extension" value="true" />
-        <property name="foreign_keys" value="true" />
       </driver-properties>
     </data-source>
     <data-source source="LOCAL" name="hibernate.cfg.xml/Hibernate" uuid="6cdc1b61-1c13-476b-adde-e05ab6fa28f7">

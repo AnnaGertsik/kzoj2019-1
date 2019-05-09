@@ -22,7 +22,6 @@ public class AutorizationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SingleTone singleTone=SingleTone.getInstance("???");
         singleTone.setLogin("???");
-        singleTone.setAccessLevel(0);
         req.getRequestDispatcher("AutorizWindow.jsp").forward(req, resp);
     }
 
@@ -48,10 +47,8 @@ public class AutorizationServlet extends HttpServlet {
             else {
                 SingleTone singleTone=SingleTone.getInstance("???");
                 singleTone.setLogin(user.getLogin());
-                singleTone.setAccessLevel(user.getAccessLevel());
                 req.setAttribute("userName", user.getLogin());
-                if(user.getAccessLevel()==1|| user.getAccessLevel()==2) req.getRequestDispatcher("AdminMainWindow.jsp").forward(req, resp);
-                else req.getRequestDispatcher("MainWindow.jsp").forward(req, resp);
+                req.getRequestDispatcher("MainWindow.jsp").forward(req, resp);
             }
         }
         catch (Exception e){
